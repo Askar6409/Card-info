@@ -1,497 +1,61 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بانک رفاه - اطلاعات حساب</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-shadow: rgba(0, 0, 0, 0.6);
-            --accent-color: rgba(255, 255, 255, 0.2);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #020617);
-            color: var(--text-primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            direction: rtl;
-        }
-        
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(18px);
-            padding: 32px;
-            border-radius: 22px;
-            box-shadow: 0 0 40px var(--glass-shadow);
-            border: 1px solid var(--glass-border);
-            max-width: 380px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-        
-        /* افکت نور شیشه‌ای */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        
-        .card:hover::before {
-            opacity: 1;
-        }
-        
-        .bank-header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--accent-color);
-        }
-        
-        .bank-icon {
-            background: rgba(255, 255, 255, 0.1);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .bank-name {
-            font-size: 26px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        
-        .info-container {
-            margin: 20px 0;
-        }
-        
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .info-item:last-child {
-            border-bottom: none;
-        }
-        
-        .info-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-secondary);
-            font-size: 15px;
-        }
-        
-        .info-value {
-            font-weight: 500;
-            text-align: left;
-            direction: ltr;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .card-number-container {
-            background: rgba(0, 0, 0, 0.25);
-            padding: 18px;
-            border-radius: 12px;
-            margin: 25px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-        
-        .card-number-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-        
-        .card-number {
-            font-family: 'Courier New', monospace;
-            font-size: 22px;
-            letter-spacing: 4px;
-            padding: 10px;
-            direction: ltr;
-        }
-        
-        .iban-container {
-            background: rgba(0, 0, 0, 0.25);
-            padding: 18px;
-            border-radius: 12px;
-            margin: 25px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-        
-        .iban-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-        
-        .iban-value {
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            letter-spacing: 1px;
-            word-break: break-all;
-            direction: ltr;
-            padding: 10px;
-        }
-        
-        .copy-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .copy-icon:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        .footer {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 15px;
-        }
-        
-        .business-name {
-            font-size: 18px;
-            margin-top: 5px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        /* انیمیشن پالس برای قسمت‌های قابل کپی */
-        .copyable {
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .copyable:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .copyable::after {
-            content: 'کپی';
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 3px 8px;
-            border-radius: 4px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .copyable:hover::after {
-            opacity: 1;
-        }
-        
-        /* نوتیفیکیشن */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 100;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* افکت نور در پس‌زمینه */
-        .bg-light {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 70%);
-            z-index: -1;
-            animation: float 15s infinite ease-in-out;
-        }
-        
-        .bg-light:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            width: 400px;
-            height: 400px;
-            animation-delay: 0s;
-        }
-        
-        .bg-light:nth-child(2) {
-            bottom: 10%;
-            right: 10%;
-            width: 300px;
-            height: 300px;
-            animation-delay: 5s;
-        }
-        
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) translateX(0);
-            }
-            50% {
-                transform: translateY(-20px) translateX(20px);
-            }
-        }
-        
-        /* ریسپانسیو */
-        @media (max-width: 480px) {
-            .card {
-                padding: 25px 20px;
-                max-width: 95%;
-            }
-            
-            .card-number {
-                font-size: 18px;
-                letter-spacing: 3px;
-            }
-            
-            .bank-name {
-                font-size: 22px;
-            }
-            
-            .info-value {
-                font-size: 14px;
-                padding: 6px 10px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- افکت‌های نور پس‌زمینه -->
-    <div class="bg-light"></div>
-    <div class="bg-light"></div>
-    
-    <div class="card">
-        <div class="bank-header">
-            <div class="bank-icon">
-                <i class="fas fa-university"></i>
-            </div>
-            <h1 class="bank-name">بانک رفاه</h1>
-        </div>
-        
-        <div class="info-container">
-            <div class="info-item">
-                <div class="info-label">
-                    <i class="fas fa-user"></i>
-                    <span>نام صاحب حساب</span>
-                </div>
-                <div class="info-value">عباس عساکره</div>
-            </div>
-        </div>
-        
-        <div class="card-number-container">
-            <div class="card-number-label">شماره کارت بانکی</div>
-            <div class="card-number copyable" id="cardNumber">5894 6311 6071 7518</div>
-            <div class="copy-icon" id="copyCardBtn">
-                <i class="far fa-copy"></i>
-            </div>
-        </div>
-        
-        <div class="info-container">
-            <div class="info-item">
-                <div class="info-label">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>تاریخ انقضا</span>
-                </div>
-                <div class="info-value">07/30</div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-label">
-                    <i class="fas fa-credit-card"></i>
-                    <span>نوع کارت</span>
-                </div>
-                <div class="info-value">Debit</div>
-            </div>
-        </div>
-        
-        <div class="iban-container">
-            <div class="iban-label">شماره شبا</div>
-            <div class="iban-value copyable" id="ibanValue">IR57013010000000320909062</div>
-            <div class="copy-icon" id="copyIbanBtn">
-                <i class="far fa-copy"></i>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p><i class="fas fa-shield-alt"></i> اطلاعات امنیتی محافظت شده</p>
-            <div class="business-name">تراشکاری عساکره</div>
-        </div>
-    </div>
-    
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span>متن کپی شد!</span>
-    </div>
+<meta charset="UTF-8">
+<title>Bank Refah Info</title>
+<style>
+body {
+  background: linear-gradient(135deg, #0f172a, #020617);
+  font-family: sans-serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  direction: rtl;
+}
 
-    <script>
-        // عناصر DOM
-        const cardNumber = document.getElementById('cardNumber');
-        const ibanValue = document.getElementById('ibanValue');
-        const copyCardBtn = document.getElementById('copyCardBtn');
-        const copyIbanBtn = document.getElementById('copyIbanBtn');
-        const notification = document.getElementById('notification');
-        
-        // متن‌های اصلی بدون فاصله
-        const cardNumberText = '5894631160717518';
-        const ibanText = 'IR57013010000000320909062';
-        
-        // تابع کپی متن
-        function copyToClipboard(text, message) {
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    showNotification(message);
-                })
-                .catch(err => {
-                    console.error('خطا در کپی: ', err);
-                    showNotification('خطا در کپی کردن');
-                });
-        }
-        
-        // کپی شماره کارت با کلیک روی دکمه
-        copyCardBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            copyToClipboard(cardNumberText, 'شماره کارت کپی شد!');
-        });
-        
-        // کپی شماره کارت با کلیک روی متن
-        cardNumber.addEventListener('click', function() {
-            copyToClipboard(cardNumberText, 'شماره کارت کپی شد!');
-        });
-        
-        // کپی شماره شبا با کلیک روی دکمه
-        copyIbanBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            copyToClipboard(ibanText, 'شماره شبا کپی شد!');
-        });
-        
-        // کپی شماره شبا با کلیک روی متن
-        ibanValue.addEventListener('click', function() {
-            copyToClipboard(ibanText, 'شماره شبا کپی شد!');
-        });
-        
-        // نمایش نوتیفیکیشن
-        function showNotification(message) {
-            notification.querySelector('span').textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // افکت hover برای کارت
-        const card = document.querySelector('.card');
-        
-        card.addEventListener('mousemove', function(e) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            // ایجاد افکت نور متحرک
-            card.style.background = `
-                radial-gradient(circle at ${x}px ${y}px, 
-                rgba(255,255,255,0.1) 0%, 
-                rgba(255,255,255,0.08) 30%,
-                rgba(255,255,255,0.05) 70%),
-                rgba(255, 255, 255, 0.08)
-            `;
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            card.style.background = 'rgba(255, 255, 255, 0.08)';
-        });
-        
-        // افزودن انیمیشن جزئی برای آیتم‌های قابل کپی
-        const copyableItems = document.querySelectorAll('.copyable');
-        copyableItems.forEach(item => {
-            item.addEventListener('click', function() {
-                this.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
-            });
-        });
-    </script>
+.card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  padding: 32px;
+  border-radius: 22px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  max-width: 380px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 18px;
+  font-size: 22px;
+}
+
+.info {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.info div {
+  margin: 6px 0;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <h2>🏦 بانک رفاه</h2>
+
+  <div class="info">
+    <div>👤 نام: عباس عساکره</div>
+    <div>💳 شماره کارت: 5894 6311 6071 7518</div>
+    <div>🏦 شبا: IR57013010000000320909062</div>
+    <div>📱 تلفن: 09166336409 </div>
+  </div>
+
+  <p style="margin-top:18px; opacity:0.6;">تراشکاری عساکره</p>
+</div>
 </body>
 </html>
